@@ -1,0 +1,22 @@
+#!/bin/bash
+
+BASEDIR=$(dirname $0);
+
+if [ $# -eq 0 ]
+then
+	cat $BASEDIR/doc/usage
+else if [ $# -eq 1 -a $1 = "-list" ]
+then
+	cat $BASEDIR/doc/prototypes-list
+else if [ $# -eq 1 ]
+then
+	cat $BASEDIR/doc/usage
+else if [ $# -eq 2 ]
+then
+	$BASEDIR/prototype.sh $1 $2
+else
+	cat $BASEDIR/doc/usage
+fi
+fi
+fi
+fi

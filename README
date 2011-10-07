@@ -1,0 +1,24 @@
+StartPoint 
+Author: Jeferson Leao
+Mail: jsanchesleao@gmail.com
+********************************************************************************
+*ENGINE CREATED TO EASY THE DEVELOPMENT PROCESS                                *
+*                                                                              *
+*bin directory contains all necessary scripts to be included on PATH           *
+*                                                                              *
+*set START_POINT_HOME environment variable pointing to the directory you       *
+*extracted the tarball                                                         *
+*                                                                              *
+*bash$> startpoint prototypename [projectname] #creates a new project          *
+*bash$> startpoint -list                       #lists all installed prototypes *
+*                                                                              *
+********************************************************************************
+
+
+list of all supported prototypes:
+
+
+*scala-simple			=> Simple prototype with an empty scala project set up with ant
+*				
+*java-simple			=> Simple prototype with an empty java project set up with ant
+*java-jmx			=> JXM java prototype set up with ant

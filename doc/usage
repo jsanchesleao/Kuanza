@@ -1,0 +1,2 @@
+startpoint prototypename projectname   #creates a new project
+startpoint -list                       #lists all installed prototypes
