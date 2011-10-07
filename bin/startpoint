@@ -1,0 +1,20 @@
+#!/bin/bash
+
+if [ $# -eq 0 ]
+then
+	cat $START_POINT_HOME/doc/usage
+else if [ $# -eq 1 -a $1 = "-list" ]
+then
+	cat $START_POINT_HOME/doc/prototypes-list
+else if [ $# -eq 1 ]
+then
+	cat $START_POINT_HOME/doc/usage
+else if [ $# -eq 2 ]
+then
+	$START_POINT_HOME/bin/prototype.sh $1 $2
+else
+	cat $START_POINT_HOME/doc/usage
+fi
+fi
+fi
+fi

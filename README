@@ -9,7 +9,7 @@ Mail: jsanchesleao@gmail.com
 *set START_POINT_HOME environment variable pointing to the directory you       *
 *extracted the tarball                                                         *
 *                                                                              *
-*bash$> startpoint prototypename [projectname] #creates a new project          *
+*bash$> startpoint prototypename projectname   #creates a new project          *
 *bash$> startpoint -list                       #lists all installed prototypes *
 *                                                                              *
 ********************************************************************************
@@ -17,8 +17,6 @@ Mail: jsanchesleao@gmail.com
 
 list of all supported prototypes:
 
-
-*scala-simple			=> Simple prototype with an empty scala project set up with ant
-*				
-*java-simple			=> Simple prototype with an empty java project set up with ant
-*java-jmx			=> JXM java prototype set up with ant
+scala-simple			Simple prototype with an empty scala project set up with ant
+java-simple			Simple prototype with an empty java project set up with ant
+java-jmx			JXM java prototype set up with ant

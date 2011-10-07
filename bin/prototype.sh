@@ -1,9 +1,8 @@
-MYDIR=$(dirname $0)
 PROT=$1-prototype.tar.gz
 
-if [ -f $MYDIR/prototypes/$PROT ]
+if [ -f $START_POINT_HOME/prototypes/$PROT ]
 then
-	cp $MYDIR/prototypes/$PROT .
+	cp $START_POINT_HOME/prototypes/$PROT .
 	tar xzf $PROT
 	mv $1 $2
 	rm $PROT
