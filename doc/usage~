@@ -1,4 +1,0 @@
-usage:
-
-spoint prototypename projectname   #creates a new project
-spoint -list                       #lists all installed prototypes
