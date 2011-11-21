@@ -1,5 +1,5 @@
 scala-simple			Simple prototype with an empty scala project set up with ant
 java-simple			Simple prototype with an empty java project set up with ant
 java-jmx			JXM java prototype set up with ant
-
+java-hibernate			Hibernate java prototype set up with ant
 js-builder			JavaScript project to be used with FCO's JSBuilder
