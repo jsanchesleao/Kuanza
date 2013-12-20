@@ -3,10 +3,10 @@
 import re, sys, shutil, errno, os, tempfile
 
 import optparse
-import interpreter
+from lib.interpreter import Interpreter
+from lib.filewalker import FileWalker
 
 def main():
-
     parser = optparse.OptionParser()
     parser.add_option('--prototype', '-p')
     parser.add_option('--name', '-n')
@@ -29,8 +29,9 @@ def main():
         {'PROJECT_NAME' : projectname}
     ]
 
-    for file in listAllFiles( projectname ):
-        interpreter.Interpreter(file).interpret(projectVariables)
+    FileWalker(projectname).each( lambda filename: Interpreter(filename).interpret(projectVariables) )
+
+
 
 def getProjectName(options):
     if not options.name:
@@ -47,13 +48,6 @@ def getPrototypePath(prototypeName):
 def copyProject(prototype, projectname):
     shutil.copytree(prototype, projectname)
 
-def listAllFiles(dirname):
-    rootdir = dirname
-    for root, subFolders, files in os.walk(rootdir):
-        for file in files:
-            fullpath = os.path.join(root, file)
-            if not re.match(r'.*?node_modules.*', fullpath):
-                yield fullpath
 
 
 if __name__ == '__main__':
