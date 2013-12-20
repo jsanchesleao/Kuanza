@@ -3,6 +3,7 @@
 import re, sys, shutil, errno, os, tempfile
 
 import optparse
+import interpreter
 
 def main():
 
@@ -29,7 +30,7 @@ def main():
     ]
 
     for file in listAllFiles( projectname ):
-        replaceVars(file, projectVariables)
+        interpreter.Interpreter(file).interpret(projectVariables)
 
 def getProjectName(options):
     if not options.name:
@@ -53,23 +54,6 @@ def listAllFiles(dirname):
             fullpath = os.path.join(root, file)
             if not re.match(r'.*?node_modules.*', fullpath):
                 yield fullpath
-            
-
-def replaceVars(filename, context):
-    fh, tempPath = tempfile.mkstemp()
-    with open(filename) as oldFile:
-        with open(tempPath, 'w') as newFile:
-            for line in oldFile:
-                newFile.write( interpretVariables(line, context) )
-    os.close(fh)
-    shutil.move(tempPath, filename)
-
-def interpretVariables( line, context ):
-    finalLine = line
-    for variable in context:
-        for old, new in variable.items():
-            finalLine = finalLine.replace( '[[%' + old + ']]', new )
-    return finalLine        
 
 
 if __name__ == '__main__':
