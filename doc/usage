@@ -1,4 +1,0 @@
-usage:
-
-sp prototypename projectname   #creates a new project
-sp -list                       #lists all installed prototypes
