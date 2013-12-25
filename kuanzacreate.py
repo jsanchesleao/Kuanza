@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 
-import re, sys, shutil, errno, os, tempfile
+import re, sys, errno, os, tempfile
 
 import optparse
 from lib.interpreter import Interpreter
 from lib.filewalker import FileWalker
+from lib.kuanzaproto import KuanzaProto
+import kuanzalist
 
 def main():
     parser = optparse.OptionParser()
@@ -42,11 +44,12 @@ def getProjectName(options):
 
 
 def getPrototypePath(prototypeName):
-    return os.path.join( os.environ['KUANZA_HOME'], 'prototypes', prototypeName )
+    return os.path.join( os.environ['KUANZA_HOME'], 'prototypes', kuanzalist.find( prototypeName ) )
 
 
 def copyProject(prototype, projectname):
-    shutil.copytree(prototype, projectname)
+    proto = KuanzaProto( prototype )
+    proto.extract( projectname )
 
 
 
