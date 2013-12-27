@@ -1,27 +1,53 @@
 import os
 from lib.kuanzaproto import KuanzaProto
+from lib.kuanzapackage import KuanzaPackage
 
-def getInstalledPrototypeNames():
-    for proto in getInstalledPrototypeFiles():
-        yield loadPrototypeObject(proto).getName()
+def getInstalledPackageNames():
+    for packagepath in getInstalledPackagePaths():
+        yield KuanzaPackage( packagepath ).getName()
 
-def getInstalledPrototypeFiles():
-    for proto in os.listdir(  getPrototypesPath() ):
+def checkPrototypeIsInstalled(packagename, prototype):
+    if not packagename in getInstalledPackageNames():
+        return False
+    if not prototype in getInstalledPrototypeNames( packagename ):
+        return False
+    return True
+
+def getInstalledPackages():
+    for packagepath in getInstalledPackagePaths():
+        yield KuanzaPackage( packagepath )
+
+def getInstalledPackagePaths():
+    for packfolder in os.listdir( getPackagesPath() ):
+        yield os.path.join( getPackagesPath(), packfolder )
+
+def getInstalledPrototypeNames(packagename):
+    packagePath = findPackagePathByName(packagename)
+    for proto in getInstalledPrototypeFiles(packagename):
+        yield loadPrototypeObject( packagePath, proto ).getName()
+
+def getInstalledPrototypeFiles(packagename):
+    for proto in os.listdir(  findPackagePathByName(packagename) ):
         if( proto.endswith('.zip') ):
             yield proto
 
-def getPrototypesPath():
+def getPackagesPath():
     return os.path.join(  os.environ['KUANZA_HOME'], 'prototypes')
 
-def getPrototypePath(prototypeName):
-    return os.path.join( os.environ['KUANZA_HOME'], 'prototypes', findZipFileByPrototypeName( prototypeName ) )
+def loadPrototypeObject(packagepath, zipfile):
+    return KuanzaProto( os.path.join( packagepath, zipfile ) )
 
-def loadPrototypeObject(zipfile):
-    return KuanzaProto( os.path.join(getPrototypesPath(), zipfile) )
+def findZipFileByPrototypeName(packagename, name):
 
+    packagepath = findPackagePathByName( packagename )
 
-def findZipFileByPrototypeName(name):
-    for proto in getInstalledPrototypeFiles():
-        if( name == loadPrototypeObject(proto).getName() ):
-            return proto
+    for proto in getInstalledPrototypeFiles(packagename):
+        if( name == loadPrototypeObject( packagepath, proto ).getName() ):
+            return os.path.join( findPackagePathByName(packagename), proto )
+    return None
+
+def findPackagePathByName(packagename):
+    for path in getInstalledPackagePaths():
+        if KuanzaPackage(path).getName() == packagename:
+            return path
     return None

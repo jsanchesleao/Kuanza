@@ -10,12 +10,16 @@ import lib.protoservice as protoservice
 
 def main():
     parser = optparse.OptionParser()
-    parser.add_option('--prototype', '-p')
+    parser.add_option('--package', '-p', default='Default')
     options, arguments = parser.parse_args()
 
-    if not options.prototype:
-        print( 'Enter a prototype with -p <name>')
-        print( 'For a list of installed prototypes use kuanzalist tool')
+    if len(arguments) == 0:
+        print( 'Usage: kuanzacreate.py [-p <package>] <prototype> [<project name>] ')
+        print( 'For a list of installed packages and their prototypes use kuanzalist tool')
+        sys.exit(-1)
+
+    if not protoservice.checkPrototypeIsInstalled( options.package, arguments[0] ):
+        print('Prototype [%s] of package [%s] cannot be found' % (arguments[0], options.package) )
         sys.exit(-1)
 
     projectname = getProjectName(arguments)
@@ -24,7 +28,8 @@ def main():
         print("Project name cannot be empty")
         input()
         sys.exit(-1)
-    copyProject( protoservice.getPrototypePath(options.prototype), projectname)
+
+    copyProject( protoservice.findZipFileByPrototypeName(options.package, arguments[0]), projectname)
 
     projectVariables = [
         {'PROJECT_NAME' : projectname}
@@ -35,12 +40,12 @@ def main():
 
 
 def getProjectName(arguments):
-    if len(arguments) == 0:
+    if len(arguments) == 1:
         print('No project name specified with -n option. Entering interactive mode')
         print("Enter the project name")
         return input()
-    elif len(arguments) == 1:
-        return arguments[0]
+    elif len(arguments) == 2:
+        return arguments[1]
     else:
         print('More than one project name was passed. Aborting')
         exit(-1)

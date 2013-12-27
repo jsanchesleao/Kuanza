@@ -6,18 +6,20 @@ import lib.protoservice as protoservice
 
 def main():
     parser = optparse.OptionParser()
+    parser.add_option('-p','--package', default='Default')
     parser.add_option('--remove', action='store_true', default=False)
     options, args = parser.parse_args()
 
     if( options.remove ):
         for arg in args:
-            uninstall(arg)
+            uninstall( options.package, arg)
     else:
         for arg in args:
-            install( arg )
+            install( options.package, arg )
 
-def uninstall( protoname ):
-    protofile = protoservice.findZipFileByPrototypeName( protoname )
+def uninstall( packagename, protoname ):
+    protofile = protoservice.findZipFileByPrototypeName( packagename, protoname )
+    print( protoname )
     
     if protofile == None:
         print('Prototype %s not found' % protoname)
@@ -27,18 +29,18 @@ def uninstall( protoname ):
     response = input()
 
     if response.upper() == 'Y':        
-        fullpath = os.path.join(protoservice.getPrototypesPath(), protofile)
+        fullpath = os.path.join(protoservice.findZipFileByPrototypeName(packagename, protoname) )
         os.remove( fullpath )
         print( 'Prototype successfully uninstalled')
     else:
         print( 'Not removing')
     
 
-def install( protofile ):
+def install( packagename, protofile ):
     name = verifyProto(protofile)
-    verifyIfCanInstall( protofile, name )
-    shutil.copyfile( protofile, os.path.join( protoservice.getPrototypesPath(), protofile ) )
-    print('Prototype %s successfully installed' % name)
+    verifyIfCanInstall( packagename, protofile, name )
+    shutil.copyfile( protofile, os.path.join( protoservice.findPackagePathByName(packagename), protofile ) )
+    print('Prototype %s successfully installed in the %s package' % (name, packagename))
 
 
 def verifyProto( protofile ):
@@ -51,15 +53,15 @@ def verifyProto( protofile ):
         print('There is an error with your prototype file')
         exit(-1)
 
-def verifyIfCanInstall( protofile, name ):
-    prototypesPath = protoservice.getPrototypesPath()
+def verifyIfCanInstall(packagename, protofile, name ):
+    packagePath = protoservice.findPackagePathByName(packagename)
     prototypeName  = os.path.basename( protofile )
-    if os.path.exists( os.path.join(prototypesPath, prototypeName) ) :
-        print('There already is a prototype with the same filename installed')
+    if os.path.exists( os.path.join(packagePath, prototypeName) ) :
+        print('There already is a prototype with the same filename installed in the [%s] package ' % packagename)
         exit(-1)
 
-    if name in protoservice.getInstalledPrototypeNames():
-        print('There already is a prototype with the same name installed')
+    if name in protoservice.getInstalledPrototypeNames(packagename):
+        print('There already is a prototype with the same name installed in the [%s] package' % packagename)
         exit(-1)
 
 
