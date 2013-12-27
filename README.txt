@@ -1,11 +1,11 @@
 Install kuanza by simply extracting it and pointing a system variable named KUANZA_HOME to that directory
 It needs python 3
 
-To create an instance of a prototype, use the kuanzacreate tool as follows:
-    $>kuanzacreate.py [-p <PACKAGE_NAME>] <PROTOTYPE_NAME> [<INSTANCE_NAME>]
+To create an instance of a prototype, use the kzcreate tool as follows:
+    $>kzcreate.py [-p <PACKAGE_NAME>] <PROTOTYPE_NAME> [<INSTANCE_NAME>]
 
-For a list of installed prototypes and their packages, use kuanzalist tool:
-    $>kuanzalist.py
+For a list of installed prototypes and their packages, use kzlist tool:
+    $>kzlist.py
 
 
 Prototypes must be zip files inside a package dir.
@@ -40,13 +40,13 @@ Currently the accepted format is:
 
 
 
-create a prototype zip with the kuanzapack util as follows:
-    $> kuanzapack.py --name <PROTO_NAME> <PROTO_DIR>
+create a prototype zip with the kzpack util as follows:
+    $> kzpack.py --name <PROTO_NAME> <PROTO_DIR>
 
 
-to install a prototype zip use the kuanzainstall util as follows:
-    $> kuanzainstall.py [-p <TARGET_PACKAGE>] <PROTO_ZIP>
+to install a prototype zip use the kzinstall util as follows:
+    $> kzinstall.py [-p <TARGET_PACKAGE>] <PROTO_ZIP>
 
-to uninstall a prototype, find it's name with kuanzalist.py and remove as follows:
-    $> kuanzainstall.py --remove [-p <TARGET_PACKAGE>] <PROTO_NAME>
+to uninstall a prototype, find it's name with kzlist.py and remove as follows:
+    $> kzinstall.py --remove [-p <TARGET_PACKAGE>] <PROTO_NAME>
     

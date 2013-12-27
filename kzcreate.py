@@ -14,8 +14,8 @@ def main():
     options, arguments = parser.parse_args()
 
     if len(arguments) == 0:
-        print( 'Usage: kuanzacreate.py [-p <package>] <prototype> [<project name>] ')
-        print( 'For a list of installed packages and their prototypes use kuanzalist tool')
+        print( 'Usage: kzcreate.py [-p <package>] <prototype> [<project name>] ')
+        print( 'For a list of installed packages and their prototypes use kzlist tool')
         sys.exit(-1)
 
     if not protoservice.checkPrototypeIsInstalled( options.package, arguments[0] ):
