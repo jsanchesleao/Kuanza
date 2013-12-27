@@ -1,3 +1,5 @@
+Install kuanza by simply extracting it and pointing a system variable named KUANZA_HOME to that directory
+It needs python 3
 
 To create an instance of a prototype, use the kuanzacreate tool as follows:
     $>kuanzacreate.py [-p <PACKAGE_NAME>] <PROTOTYPE_NAME> [<INSTANCE_NAME>]
