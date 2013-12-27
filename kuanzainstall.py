@@ -2,7 +2,7 @@
 
 import optparse, shutil, os
 from lib.kuanzaproto import KuanzaProto
-import kuanzalist
+import lib.protoservice as protoservice
 
 def main():
     parser = optparse.OptionParser()
@@ -17,12 +17,17 @@ def main():
             install( arg )
 
 def uninstall( protoname ):
-    protofile = kuanzalist.find( protoname )
+    protofile = protoservice.findZipFileByPrototypeName( protoname )
+    
+    if protofile == None:
+        print('Prototype %s not found' % protoname)
+        exit(-1)
+    
     print( 'Are you sure you want to remove prototype named [%s]? y/N' % protoname )
     response = input()
 
-    if response.upper() == 'Y':
-        fullpath = os.path.join(kuanzalist.getPrototypesPath(), protofile)
+    if response.upper() == 'Y':        
+        fullpath = os.path.join(protoservice.getPrototypesPath(), protofile)
         os.remove( fullpath )
         print( 'Prototype successfully uninstalled')
     else:
@@ -32,7 +37,7 @@ def uninstall( protoname ):
 def install( protofile ):
     name = verifyProto(protofile)
     verifyIfCanInstall( protofile, name )
-    shutil.copyfile( protofile, os.path.join( kuanzalist.getPrototypesPath(), protofile ) )
+    shutil.copyfile( protofile, os.path.join( protoservice.getPrototypesPath(), protofile ) )
     print('Prototype %s successfully installed' % name)
 
 
@@ -47,13 +52,13 @@ def verifyProto( protofile ):
         exit(-1)
 
 def verifyIfCanInstall( protofile, name ):
-    prototypesPath = kuanzalist.getPrototypesPath()
+    prototypesPath = protoservice.getPrototypesPath()
     prototypeName  = os.path.basename( protofile )
     if os.path.exists( os.path.join(prototypesPath, prototypeName) ) :
         print('There already is a prototype with the same filename installed')
         exit(-1)
 
-    if name in kuanzalist.getInstalledPrototypeNames():
+    if name in protoservice.getInstalledPrototypeNames():
         print('There already is a prototype with the same name installed')
         exit(-1)
 

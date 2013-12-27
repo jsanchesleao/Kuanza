@@ -6,12 +6,11 @@ import optparse
 from lib.interpreter import Interpreter
 from lib.filewalker import FileWalker
 from lib.kuanzaproto import KuanzaProto
-import kuanzalist
+import lib.protoservice as protoservice
 
 def main():
     parser = optparse.OptionParser()
     parser.add_option('--prototype', '-p')
-    parser.add_option('--name', '-n')
     options, arguments = parser.parse_args()
 
     if not options.prototype:
@@ -19,13 +18,13 @@ def main():
         print( 'For a list of installed prototypes use kuanzalist tool')
         sys.exit(-1)
 
-    projectname = getProjectName(options)
+    projectname = getProjectName(arguments)
     print("Creating project %s" % projectname)  
     if projectname == '':
         print("Project name cannot be empty")
         input()
         sys.exit(-1)
-    copyProject(kuanzalist.getPrototypePath(options.prototype), projectname)
+    copyProject( protoservice.getPrototypePath(options.prototype), projectname)
 
     projectVariables = [
         {'PROJECT_NAME' : projectname}
@@ -35,12 +34,16 @@ def main():
 
 
 
-def getProjectName(options):
-    if not options.name:
+def getProjectName(arguments):
+    if len(arguments) == 0:
         print('No project name specified with -n option. Entering interactive mode')
         print("Enter the project name")
         return input()
-    return options.name
+    elif len(arguments) == 1:
+        return arguments[0]
+    else:
+        print('More than one project name was passed. Aborting')
+        exit(-1)
 
 
 
