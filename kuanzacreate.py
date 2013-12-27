@@ -16,7 +16,7 @@ def main():
 
     if not options.prototype:
         print( 'Enter a prototype with -p <name>')
-        print( 'For a list of installed prototypes use kuanzalist.py tool')
+        print( 'For a list of installed prototypes use kuanzalist tool')
         sys.exit(-1)
 
     projectname = getProjectName(options)
@@ -25,7 +25,7 @@ def main():
         print("Project name cannot be empty")
         input()
         sys.exit(-1)
-    copyProject(getPrototypePath(options.prototype), projectname)
+    copyProject(kuanzalist.getPrototypePath(options.prototype), projectname)
 
     projectVariables = [
         {'PROJECT_NAME' : projectname}
@@ -42,9 +42,6 @@ def getProjectName(options):
         return input()
     return options.name
 
-
-def getPrototypePath(prototypeName):
-    return os.path.join( os.environ['KUANZA_HOME'], 'prototypes', kuanzalist.find( prototypeName ) )
 
 
 def copyProject(prototype, projectname):

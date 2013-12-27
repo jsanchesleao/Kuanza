@@ -4,6 +4,8 @@ import re, os
 class FileWalker:
 
 	def __init__(self, dirname):
+		if not os.path.isdir(dirname) :
+			raise IOError( '%s is not a directory' % dirname )
 		self.dirname = dirname
 
 	def each( self, action ):

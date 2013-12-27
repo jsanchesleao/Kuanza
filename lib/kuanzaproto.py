@@ -23,7 +23,8 @@ class KuanzaProto:
         shutil.move( os.path.join(tempdir, 'prototype'), projectname )
         shutil.rmtree( tempdir )
 
-
+    def close(self):
+        self.zip.close()
 
     def getName(self):
         return self.info['name']
