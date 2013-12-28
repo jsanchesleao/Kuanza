@@ -5,7 +5,7 @@ To create an instance of a prototype, use the kzcreate tool as follows:
     $>kzcreate.py [-p <PACKAGE_NAME>] <PROTOTYPE_NAME> [<INSTANCE_NAME>]
 
 For a list of installed prototypes and their packages, use kzlist tool:
-    $>kzlist.py
+    $>kzlist.py [-a] #use -a flag to show even empty packages
 
 
 Prototypes must be zip files inside a package dir.
@@ -38,7 +38,11 @@ Currently the accepted format is:
     "description": "<Brief description of the contents of the package>"
 }
 
+to create an empty package, use kzpkg tool as follows:
+    $>kzpkg --new <PACKAGE_NAME> [<DESCRIPTION>]
 
+to edit a package's description, use kzpkg tool as follows:
+    $>kzpkg --desc <PACKAGE_NAME> <NEW_DESCRIPTION>
 
 create a prototype zip with the kzpack util as follows:
     $> kzpack.py --name <PROTO_NAME> <PROTO_DIR>
