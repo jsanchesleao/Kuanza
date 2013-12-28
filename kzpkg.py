@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-import optparse, os
-import lib.protoservice as protoservice
-import json, shutil
+import optparse
+from lib.kuanzapackage import KuanzaPackage
+from lib.packagemanager import PackageManager
 
 def main():
     parse = optparse.OptionParser()
@@ -30,20 +30,13 @@ def createPackage(args):
         writePackage( args[0], args[1])
 
 def writePackage( name, description ):
-    if name in protoservice.getInstalledPackageNames():
+    if KuanzaPackage.exists(name):
         print( 'There already is a package named [%s]' % name)
         return
-    packagesPath = protoservice.getPackagesPath()
-    newPackagePath = os.path.join( packagesPath, name )
-    os.mkdir( newPackagePath )
-    writePackageInfo( newPackagePath, name, description )
-    print('Package created')
 
-def writePackageInfo(path, name, description):
-    infoPath = os.path.join( path, 'package.info' )
-    with open(infoPath, 'w') as infoFile:
-        info = { 'name': name, 'description': description }
-        infoFile.write( json.dumps(info, sort_keys=True, indent=4) )
+    packageManager = PackageManager(name)
+    packageManager.writePackage( {'description': description} )
+    print('Package created')
 
 def editDescription(args):
     if len(args) == 0:
@@ -52,24 +45,20 @@ def editDescription(args):
     elif len(args) == 1:
         print('No description was specified. Aborting.')
         return
+
+    name = args[0]
+    description = args[1]
+    if not KuanzaPackage.exists( name ):
+        print ('There is no package [%s] installed. Aborting.' % name)
+        return
     else:
-        writeDescription( args[0], args[1] )
+        writeDescription( name, description )
+        print('Description successfully altered.')
 
 def writeDescription(name, description):
-    if name not in protoservice.getInstalledPackageNames():
-        print( 'Package [%s] not found' % name)
-        return
-
-    infoPath = os.path.join( protoservice.findPackagePathByName(name), 'package.info' )
-    infoData = None
-    with open(infoPath) as infoFile:
-        infoData = json.load(infoFile)
-
-    if infoData != None:
-        infoData['description'] = description
-        with open(infoPath, 'w') as infoFile:
-            infoFile.write( json.dumps(infoData, sort_keys=True, indent=4) )
-    print('Description updated')
+    package = KuanzaPackage.createByName( name )
+    package.setDescription( description )
+    package.save()
 
 def purgePackage(args):
     if len(args) == 0:
@@ -77,15 +66,11 @@ def purgePackage(args):
         return
     else:
         name = args[0]
-        if not packageExists(name):
+        if not KuanzaPackage.exists(name):
             print('Package %s not found' % name)
         elif confirmPurge(name):
-            removePackageFolder(name)
-
-def packageExists(name):
-    if name in protoservice.getInstalledPackageNames():
-        return True
-    return False
+            PackageManager(name).purgePackage()
+            print( 'Package successfully purged' )
 
 def confirmPurge(name):
     print('Are you sure you want to remove the %s package and ALL its prototypes? y/N' % name)
@@ -96,10 +81,7 @@ def confirmPurge(name):
         return confirm.upper() == 'Y'
     return False
 
-def removePackageFolder(name):
-    prototypePath = protoservice.findPackagePathByName(name)
-    shutil.rmtree( prototypePath )
-    print( 'Prototype successfully purged' )
+
 
 
 if __name__ == '__main__':

@@ -1,10 +1,10 @@
 import os
-from lib.kuanzaproto import KuanzaProto
-from lib.kuanzapackage import KuanzaPackage
+import lib.kuanzaproto as kuanzaproto
+import lib.kuanzapackage
 
 def getInstalledPackageNames():
     for packagepath in getInstalledPackagePaths():
-        yield KuanzaPackage( packagepath ).getName()
+        yield lib.kuanzapackage.KuanzaPackage( packagepath ).getName()
 
 def checkPrototypeIsInstalled(packagename, prototype):
     if not packagename in getInstalledPackageNames():
@@ -15,7 +15,7 @@ def checkPrototypeIsInstalled(packagename, prototype):
 
 def getInstalledPackages():
     for packagepath in getInstalledPackagePaths():
-        yield KuanzaPackage( packagepath )
+        yield lib.kuanzapackage.KuanzaPackage( packagepath )
 
 def getInstalledPackagePaths():
     for packfolder in os.listdir( getPackagesPath() ):
@@ -35,7 +35,7 @@ def getPackagesPath():
     return os.path.join(  os.environ['KUANZA_HOME'], 'prototypes')
 
 def loadPrototypeObject(packagepath, zipfile):
-    return KuanzaProto( os.path.join( packagepath, zipfile ) )
+    return kuanzaproto.KuanzaProto( os.path.join( packagepath, zipfile ) )
 
 def findZipFileByPrototypeName(packagename, name):
 
@@ -48,6 +48,6 @@ def findZipFileByPrototypeName(packagename, name):
 
 def findPackagePathByName(packagename):
     for path in getInstalledPackagePaths():
-        if KuanzaPackage(path).getName() == packagename:
+        if lib.kuanzapackage.KuanzaPackage(path).getName() == packagename:
             return path
     return None
