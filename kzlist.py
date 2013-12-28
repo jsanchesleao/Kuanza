@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 import os, optparse
-from lib.kuanzaproto import KuanzaProto
-import lib.protoservice as protoservice
+import lib.kuanzaproto as kuanzaproto
+import lib.kuanzapackage as kuanzapackage
 
 def main():
 
@@ -11,10 +11,10 @@ def main():
     options, args = parse.parse_args()
 
     print('Installed Modules and Prototypes: \n')
-    for package in protoservice.getInstalledPackages():
+    for package in kuanzapackage.KuanzaPackage.findAll():
         names = []
-        for name in protoservice.getInstalledPrototypeNames(package.getName()):
-            names.append( name )
+        for proto in kuanzaproto.KuanzaProto.findByPackage( package ):
+            names.append( proto.getName() )
         if len(names) == 0:
             if not options.all:
                 continue

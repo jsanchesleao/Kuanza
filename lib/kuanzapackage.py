@@ -1,6 +1,4 @@
-import os
-import json
-import lib.protoservice
+import os, json
 
 class KuanzaPackage:
 
@@ -25,11 +23,29 @@ class KuanzaPackage:
         with open(self._infoFilePath(), 'w') as infoFile:
             infoFile.write( json.dumps(self.info, sort_keys=True, indent=4) )
 
+    def getPath(self):
+        return self.path
 
-    @staticmethod
-    def createByName(name):
-        return KuanzaPackage( lib.protoservice.findPackagePathByName(name) )
 
     @staticmethod
     def exists(name):
-        return name in lib.protoservice.getInstalledPackageNames()
+        for pack in KuanzaPackage.findAll():
+            if name == pack.getName():
+                return True
+        return False
+
+    @staticmethod
+    def findAll():
+        for path in os.listdir( KuanzaPackage.basepath() ):
+            yield KuanzaPackage( os.path.join( KuanzaPackage.basepath(), path ) )
+
+    @staticmethod
+    def findByName(name):
+        for pack in KuanzaPackage.findAll():
+            if name == pack.getName():
+                return pack
+        return None
+
+    @staticmethod
+    def basepath():        
+        return os.path.join( os.environ['KUANZA_HOME'], 'prototypes' )

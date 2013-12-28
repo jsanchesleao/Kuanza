@@ -4,6 +4,7 @@ import tempfile
 
 class KuanzaProto:
     def __init__(self, zipfile):
+        self.zipfile = zipfile
         zip = ZipFile(zipfile)
         self.zip = zip
         self.info = json.loads( zip.read( 'prototype.info' ).decode('utf-8') )
@@ -29,6 +30,9 @@ class KuanzaProto:
     def getName(self):
         return self.info['name']
 
+    def getPath(self):
+        return self.zipfile
+
     @staticmethod
     def checkIntegrity( filepath ):
         result = False
@@ -44,3 +48,20 @@ class KuanzaProto:
                 proto.close()
 
         return result
+
+    @staticmethod
+    def findByPackage(package):
+        for zipfile in os.listdir( package.getPath() ):
+            if zipfile.endswith('.zip'):
+                yield KuanzaProto(  os.path.join( package.getPath(), zipfile ) )
+
+    @staticmethod
+    def exists( package, name ):
+        return KuanzaProto.findByPackageAndName(package, name) != None
+
+    @staticmethod
+    def findByPackageAndName(package, name):
+        for proto in KuanzaProto.findByPackage(package):
+            if proto.getName() == name:
+                return proto
+        return None

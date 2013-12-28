@@ -5,8 +5,10 @@ import re, sys, errno, os, tempfile
 import optparse
 from lib.interpreter import Interpreter
 from lib.filewalker import FileWalker
-from lib.kuanzaproto import KuanzaProto
-import lib.protoservice as protoservice
+
+import lib.kuanzaproto as kuanzaproto
+import lib.kuanzapackage as kuanzapackage
+
 
 def main():
     parser = optparse.OptionParser()
@@ -16,20 +18,28 @@ def main():
     if len(arguments) == 0:
         print( 'Usage: kzcreate.py [-p <package>] <prototype> [<project name>] ')
         print( 'For a list of installed packages and their prototypes use kzlist tool')
-        sys.exit(-1)
+        return
 
-    if not protoservice.checkPrototypeIsInstalled( options.package, arguments[0] ):
-        print('Prototype [%s] of package [%s] cannot be found' % (arguments[0], options.package) )
-        sys.exit(-1)
+    if not kuanzapackage.KuanzaPackage.exists( options.package ):
+        print( 'Package [%s] not found. Aborting.' % options.package)
+        return
+
+    package = kuanzapackage.KuanzaPackage.findByName( options.package )
+
+    if not kuanzaproto.KuanzaProto.exists(package, arguments[0]) :
+        print('Prototype [%s] of package [%s] cannot be found' % (arguments[0], package.getName() ) )
+        return
 
     projectname = getProjectName(arguments)
     print("Creating project %s" % projectname)  
+
     if projectname == '':
         print("Project name cannot be empty")
         input()
-        sys.exit(-1)
+        return
 
-    copyProject( protoservice.findZipFileByPrototypeName(options.package, arguments[0]), projectname)
+    prototype = kuanzaproto.KuanzaProto.findByPackageAndName( package, arguments[0] )
+    prototype.extract( projectname )
 
     projectVariables = [
         {'PROJECT_NAME' : projectname}
@@ -49,12 +59,6 @@ def getProjectName(arguments):
     else:
         print('More than one project name was passed. Aborting')
         exit(-1)
-
-
-
-def copyProject(prototype, projectname):
-    proto = KuanzaProto( prototype )
-    proto.extract( projectname )
 
 
 

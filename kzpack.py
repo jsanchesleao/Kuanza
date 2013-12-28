@@ -9,7 +9,7 @@ def main():
     options, arguments = parser.parse_args()
 
     if len(arguments) != 1:
-        print('Exactly one folder must be specified. %s given ' % len(folders))
+        print('Exactly one folder must be specified. %s given ' % len(arguments))
         return
 
     folder = arguments[0]

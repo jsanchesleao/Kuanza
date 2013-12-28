@@ -1,5 +1,4 @@
 import os, json, shutil
-import lib.protoservice as protoservice
 import lib.kuanzapackage as kuanzapackage
 
 class PackageManager:
@@ -13,7 +12,7 @@ class PackageManager:
         self._writePackageInfo( packageInfo )
 
     def _packagePath(self):
-        packagesPath = protoservice.getPackagesPath()
+        packagesPath = kuanzapackage.KuanzaPackage.basepath()
         newPackagePath = os.path.join( packagesPath, self.name )
         return newPackagePath
 

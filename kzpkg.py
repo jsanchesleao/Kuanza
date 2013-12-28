@@ -56,7 +56,7 @@ def editDescription(args):
         print('Description successfully altered.')
 
 def writeDescription(name, description):
-    package = KuanzaPackage.createByName( name )
+    package = KuanzaPackage.findByName( name )
     package.setDescription( description )
     package.save()
 
