@@ -1,18 +1,22 @@
 #!/usr/bin/env python
 
-import optparse
-from lib.filewalker import FileWalker
-import zipfile
-import tempfile, json, os
+import optparse, os
+from lib.prototypemaker import PrototypeMaker
 
 def main():
     parser = optparse.OptionParser()
     parser.add_option('--name', '-n')
-    options, folders = parser.parse_args()
+    options, arguments = parser.parse_args()
 
-    if len(folders) != 1:
+    if len(arguments) != 1:
         print('Exactly one folder must be specified. %s given ' % len(folders))
-        exit(-1)
+        return
+
+    folder = arguments[0]
+
+    if not os.path.isdir( folder ):
+        print( 'There is a problem with you folder. Aborting.' )
+        return
 
     name = options.name
     if not name:
@@ -20,34 +24,9 @@ def main():
         print ('Enter prototype name:')
         name = input()
 
-    pack( folders[0], name)
+    PrototypeMaker( folder, name ).pack()
+    print('Prototype zipfile successfully created.')
 
-
-def pack( folder, name ):
-    files = []
-    try:        
-        FileWalker(folder).each( files.append )
-    except IOError as e:
-        print(e)
-        exit(-1)
-
-    zip = zipfile.ZipFile('%s.zip' % name, 'w')
-    copyPrototype(zip, folder, files)
-    writeDescriptor( zip, name )
-    zip.close()
-
-def copyPrototype(zip, folder, filelist):
-    for file in filelist:
-        arcfile = file.replace(folder, 'prototype/', 1)
-        zip.write( file, arcfile)
-
-def writeDescriptor(zip, name):
-    fh, path = tempfile.mkstemp()
-    descriptor = os.fdopen( fh, 'w')
-    descriptor.write( json.dumps({ 'name': name }, sort_keys=True, indent=4) )
-    descriptor.close()
-    zip.write( path, 'prototype.info' )
-    os.remove( path )
 
 
 if __name__ == '__main__':

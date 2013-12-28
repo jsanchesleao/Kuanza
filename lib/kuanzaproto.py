@@ -28,3 +28,19 @@ class KuanzaProto:
 
     def getName(self):
         return self.info['name']
+
+    @staticmethod
+    def checkIntegrity( filepath ):
+        result = False
+        proto = None
+        try:
+            proto = KuanzaProto( filepath )
+            if proto.getName() != None:
+                result = True
+        except:
+            result = False
+        finally:
+            if proto != None:
+                proto.close()
+
+        return result
