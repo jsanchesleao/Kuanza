@@ -1,10 +1,6 @@
 #!/usr/bin/env python
 
-import re, sys, errno, os, tempfile
-
-import optparse
-from lib.interpreter import Interpreter
-from lib.filewalker import FileWalker
+import os, optparse
 
 import lib.kuanzaproto as kuanzaproto
 import lib.kuanzapackage as kuanzapackage
@@ -13,6 +9,7 @@ import lib.kuanzapackage as kuanzapackage
 def main():
     parser = optparse.OptionParser()
     parser.add_option('--package', '-p', default='Default')
+    parser.add_option('--inline', '-i', action='store_true', default=False)
     options, arguments = parser.parse_args()
 
     if len(arguments) == 0:
@@ -39,13 +36,12 @@ def main():
         return
 
     prototype = kuanzaproto.KuanzaProto.findByPackageAndName( package, arguments[0] )
-    prototype.extract( projectname )
-
     projectVariables = [
         {'PROJECT_NAME' : projectname}
     ]
 
-    FileWalker(projectname).each( lambda filename: Interpreter(filename).interpret(projectVariables) )
+    
+    prototype.extract( projectname, projectVariables, inline=options.inline )
 
 
 

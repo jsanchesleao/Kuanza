@@ -1,6 +1,8 @@
 from zipfile import ZipFile
 import shutil, json, os
 import tempfile
+import lib.filewalker
+import lib.interpreter
 
 class KuanzaProto:
     def __init__(self, zipfile):
@@ -9,7 +11,7 @@ class KuanzaProto:
         self.zip = zip
         self.info = json.loads( zip.read( 'prototype.info' ).decode('utf-8') )
 
-    def extract(self, projectname):
+    def extract(self, projectname, projectVariables, inline=False):
         print('extracting files')
 
         tempdir = tempfile.mkdtemp()
@@ -21,8 +23,25 @@ class KuanzaProto:
                 else:
                     self.zip.extract(file, tempdir)
 
-        shutil.move( os.path.join(tempdir, 'prototype'), projectname )
+        files = lib.filewalker.FileWalker(tempdir)
+        files.each( lambda filename: lib.interpreter.Interpreter(filename).interpret(projectVariables) )
+
+
+        temppath = os.path.join(tempdir, 'prototype');
+
+        if inline:
+            self._copyinline( temppath )
+        else:
+            self._copy( temppath, projectname)    
+
         shutil.rmtree( tempdir )
+
+    def _copyinline(self, temppath):
+        files = lib.filewalker.FileWalker( temppath )
+        files.each( lambda filename: shutil.copy(filename, os.getcwd() ) )
+
+    def _copy( self, temppath, projectname ):
+        shutil.move( temppath, projectname )
 
     def close(self):
         self.zip.close()
