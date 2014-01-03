@@ -47,7 +47,7 @@ def main():
 
 def getProjectName(arguments):
     if len(arguments) == 1:
-        print('No project name specified with -n option. Entering interactive mode')
+        print('No project name specified. Entering interactive mode')
         print("Enter the project name")
         return input()
     elif len(arguments) == 2:

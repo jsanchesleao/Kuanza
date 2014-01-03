@@ -10,6 +10,7 @@ class PackageManager:
             return False
         os.mkdir( self._packagePath() )
         self._writePackageInfo( packageInfo )
+        return True
 
     def _packagePath(self):
         packagesPath = kuanzapackage.KuanzaPackage.basepath()
