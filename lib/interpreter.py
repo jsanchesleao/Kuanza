@@ -1,4 +1,5 @@
 import os, tempfile, shutil
+import lib.binaryornot.check as binary
 
 class Interpreter:
 
@@ -6,6 +7,10 @@ class Interpreter:
         self.filename = filename
 
     def interpret(self, context):
+        print('interpreting file %s' % self.filename)
+        if binary.is_binary( self.filename ):
+            return
+
         fh, tempPath = tempfile.mkstemp()
         with open(self.filename) as oldFile:
             with open(tempPath, 'w') as newFile:
