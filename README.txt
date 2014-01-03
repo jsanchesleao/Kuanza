@@ -39,10 +39,10 @@ Currently the accepted format is:
 }
 
 to create an empty package, use kzpkg tool as follows:
-    $>kzpkg --new <PACKAGE_NAME> [<DESCRIPTION>]
+    $>kzpkg.py --new <PACKAGE_NAME> [<DESCRIPTION>]
 
 to edit a package's description, use kzpkg tool as follows:
-    $>kzpkg --desc <PACKAGE_NAME> <NEW_DESCRIPTION>
+    $>kzpkg.py --desc <PACKAGE_NAME> <NEW_DESCRIPTION>
 
 create a prototype zip with the kzpack util as follows:
     $> kzpack.py --name <PROTO_NAME> <PROTO_DIR>
@@ -54,3 +54,15 @@ to install a prototype zip use the kzinstall util as follows:
 to uninstall a prototype, find it's name with kzlist.py and remove as follows:
     $> kzinstall.py --remove [-p <TARGET_PACKAGE>] <PROTO_NAME>
     
+
+
+Kuanza ships with two tools for backup/restore purposes.
+To export packages, use kzexport tool:
+    $> kzexport.py <PACKAGE_NAME> [<OTHER_PACKAGES>, ]
+
+    this will generate zipfiles containing the backup of the packages specified. These files can be imported, one by one, using kzimport tool:
+    $> kzimport.py <ZIPNAME> [--name <PACKAGE_NAME>]
+
+    this command should install the entire package, with its prototypes, into the local repository. The --name flag changes the package name for the installation.
+
+
