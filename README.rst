@@ -24,7 +24,9 @@ Quick Manual
 ------------
 
 To create an instance of a prototype, use the kzcreate tool as follows:
-    $>kzcreate.py [-p <PACKAGE_NAME>] <PROTOTYPE_NAME> [<INSTANCE_NAME>]
+    $>kzcreate.py [-p <PACKAGE_NAME>] [--inline] <PROTOTYPE_NAME> [<INSTANCE_NAME>]
+
+    The inline option does not create a directory for the new project, but use the current working directory instead
 
 To list of installed prototypes and their packages, use kzlist tool:
     $>kzlist.py [-a] #use -a flag to show even empty packages
