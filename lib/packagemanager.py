@@ -24,4 +24,4 @@ class PackageManager:
             infoFile.write( json.dumps(packageInfo, sort_keys=True, indent=4) )
 
     def purgePackage( self ):
-        shutil.rmtree( self._packagePath() )
+        shutil.rmtree( kuanzapackage.KuanzaPackage.findByName( self.name ).getPath() )
