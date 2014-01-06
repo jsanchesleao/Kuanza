@@ -7,7 +7,6 @@ class Interpreter:
         self.filename = filename
 
     def interpret(self, context):
-        print('interpreting file %s' % self.filename)
         if binary.is_binary( self.filename ):
             return
 

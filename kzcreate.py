@@ -40,8 +40,19 @@ def main():
         {'PROJECT_NAME' : projectname}
     ]
 
+    doInit = False
+    if prototype.getInit():
+        print('This prototype uses an initialization script. This operation can be unsafe.')
+        print("Should you allow it's execution? y/N")
+        response = input()
+        if response.upper() == 'Y':
+            print('initialization allowed.')
+            doInit = True
+        else:
+            print('initialization skipped')
+
     
-    prototype.extract( projectname, projectVariables, inline=options.inline )
+    prototype.extract( projectname, projectVariables, inline=options.inline, doInit=doInit )
 
 
 
