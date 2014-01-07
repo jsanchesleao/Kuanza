@@ -5,6 +5,7 @@ import shutil, tempfile, zipfile, os, json
 import lib.packagemanager
 import lib.kuanzapackage
 import lib.kuanzaproto
+import lib.kuanzarefresh
 
 
 def main():
@@ -35,6 +36,8 @@ def main():
         print('There was an unknown error. %s' % e)
     finally:
         shutil.rmtree(tempdir)
+
+    lib.kuanzarefresh.refreshPackageData()
 
 
 def doImport(dirname, options):

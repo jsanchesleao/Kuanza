@@ -3,7 +3,7 @@
 import os, optparse
 
 import lib.kuanzaproto as kuanzaproto
-import lib.kuanzapackage as kuanzapackage
+import lib.kuanzapackage
 
 
 def main():
@@ -17,28 +17,27 @@ def main():
         print( 'For a list of installed packages and their prototypes use kzlist tool')
         return
 
-    if not kuanzapackage.KuanzaPackage.exists( options.package ):
-        print( 'Package [%s] not found. Aborting.' % options.package)
+    packagesData = getPackagesData()
+
+    if not packageExists(options, packagesData):
         return
 
-    package = kuanzapackage.KuanzaPackage.findByName( options.package )
-
-    if not kuanzaproto.KuanzaProto.exists(package, arguments[0]) :
-        print('Prototype [%s] of package [%s] cannot be found' % (arguments[0], package.getName() ) )
+    if not prototypeExists(options.package, arguments[0], packagesData):
         return
+    prototypePath = packagesData[ options.package ]['prototypes'][ arguments[0] ]
+    prototype = kuanzaproto.KuanzaProto( prototypePath )
+    
 
-    projectname = getProjectName(arguments)
-    print("Creating project %s" % projectname)  
-
+    projectname = getProjectName(arguments)    
     if projectname == '':
         print("Project name cannot be empty")
-        input()
         return
 
-    prototype = kuanzaproto.KuanzaProto.findByPackageAndName( package, arguments[0] )
     projectVariables = [
         {'PROJECT_NAME' : projectname}
     ]
+
+    readVariables(prototype, projectVariables)
 
     doInit = False
     if prototype.getInit():
@@ -54,7 +53,26 @@ def main():
     
     prototype.extract( projectname, projectVariables, inline=options.inline, doInit=doInit )
 
+def getPackagesData():
+    return lib.kuanzapackage.KuanzaPackage.getPackagesData()
 
+def packageExists(options, packagesData):
+    if options.package not in packagesData.keys():
+        print( 'Package [%s] not found. Aborting.' % options.package)
+        return False
+    return True
+
+def getPackage(options):
+    return kuanzapackage.KuanzaPackage.findByName( options.package )
+
+def prototypeExists(packageName, prototypeName, packagesData):
+    if not prototypeName in packagesData[packageName]['prototypes'].keys():
+        print('Prototype [%s] of package [%s] cannot be found' % (arguments[0],packageName ) )
+        return False
+    return True
+
+def getPrototype(package, name):
+    return kuanzaproto.KuanzaProto.findByPackageAndName( package, name )
 
 def getProjectName(arguments):
     if len(arguments) == 1:
@@ -66,6 +84,12 @@ def getProjectName(arguments):
     else:
         print('More than one project name was passed. Aborting')
         exit(-1)
+
+def readVariables(prototype, projectVariables):
+    for var in prototype.getVariables():
+        print( 'Enter value: %s:' % var['desc'] )
+        value = input()
+        projectVariables.append( {  var['name'] : value } )
 
 
 

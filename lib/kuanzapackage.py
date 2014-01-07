@@ -37,7 +37,9 @@ class KuanzaPackage:
     @staticmethod
     def findAll():
         for path in os.listdir( KuanzaPackage.basepath() ):
-            yield KuanzaPackage( os.path.join( KuanzaPackage.basepath(), path ) )
+            fullpath = os.path.join( KuanzaPackage.basepath(), path )
+            if os.path.isdir( fullpath ):
+                yield KuanzaPackage( fullpath )
 
     @staticmethod
     def findByName(name):
@@ -49,3 +51,11 @@ class KuanzaPackage:
     @staticmethod
     def basepath():        
         return os.path.join( os.environ['KUANZA_HOME'], 'prototypes' )
+
+    @staticmethod
+    def getPackagesData():
+        path = os.path.join( KuanzaPackage.basepath(), 'packages.info' )
+        info = {}
+        with open( path ) as infofile:
+            info = json.load( infofile )
+        return info

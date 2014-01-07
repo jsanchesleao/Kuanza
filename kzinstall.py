@@ -3,6 +3,7 @@
 import optparse, shutil, os
 import lib.kuanzaproto as kuanzaproto
 import lib.kuanzapackage as kuanzapackage
+import lib.kuanzarefresh
 
 
 def main():
@@ -17,6 +18,8 @@ def main():
     else:
         for arg in args:
             install( options.package, arg )
+
+    lib.kuanzarefresh.refreshPackageData()
 
 def uninstall( packagename, protoname ):
 

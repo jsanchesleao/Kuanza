@@ -3,6 +3,7 @@
 import optparse
 from lib.kuanzapackage import KuanzaPackage
 from lib.packagemanager import PackageManager
+import lib.kuanzarefresh
 
 def main():
     parse = optparse.OptionParser()
@@ -17,6 +18,9 @@ def main():
         editDescription( args )
     if options.purge:
         purgePackage( args )
+
+    
+    lib.kuanzarefresh.refreshPackageData()
 
 
 def createPackage(args):

@@ -77,6 +77,11 @@ class KuanzaProto:
             return self.info['init']
         return None
 
+    def getVariables(self):
+        if 'variables' not in self.info.keys():
+            return []
+        return self.info['variables']
+
     def getPath(self):
         return self.zipfile
 
